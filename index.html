@@ -10,185 +10,56 @@
 <title>Maths Aventure QC</title>
 <link rel="manifest" href="manifest.json">
 <style>
-:root {
-  --bg: #1a1a2e;
-  --surface: #16213e;
-  --card: #0f3460;
-  --accent: #4F46E5;
-  --accent2: #7C3AED;
-  --green: #10B981;
-  --red: #EF4444;
-  --amber: #F59E0B;
-  --text: #F1F5F9;
-  --muted: #94A3B8;
-  --border: rgba(255,255,255,0.1);
-  --radius: 16px;
-  --safe-top: env(safe-area-inset-top, 0px);
-  --safe-bot: env(safe-area-inset-bottom, 0px);
-}
-* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-html, body { height: 100%; overflow: hidden; background: var(--bg); }
-body { font-family: -apple-system, 'Segoe UI', sans-serif; color: var(--text); }
-.hide { display: none !important; }
-
-/* ── APP SHELL ── */
-#app {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  padding-top: var(--safe-top);
-  padding-bottom: var(--safe-bot);
-  overflow: hidden;
-}
-.screen {
-  flex: 1;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 16px 16px 24px;
-}
-
-/* ── SPLASH ── */
-#splash {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  gap: 12px;
-  background: var(--bg);
-}
-.splash-icon { font-size: 72px; animation: pop .5s ease; }
-.splash-title { font-size: 28px; font-weight: 700; color: var(--text); text-align: center; }
-.splash-sub { font-size: 14px; color: var(--muted); text-align: center; }
-@keyframes pop { 0%{transform:scale(.5);opacity:0} 80%{transform:scale(1.1)} 100%{transform:scale(1);opacity:1} }
-
-/* ── HEADER ── */
-.app-header {
-  display: flex;
-  align-items: center;
-  padding: 12px 16px 4px;
-  padding-top: calc(12px + var(--safe-top));
-  background: var(--bg);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  border-bottom: 1px solid var(--border);
-  gap: 10px;
-}
-.back-btn {
-  width: 36px; height: 36px;
-  border-radius: 50%;
-  background: var(--surface);
-  border: none;
-  color: var(--text);
-  font-size: 18px;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-.header-title { font-size: 16px; font-weight: 600; flex: 1; }
-.header-score {
-  font-size: 14px; font-weight: 700;
-  background: var(--accent);
-  padding: 4px 12px;
-  border-radius: 99px;
-  color: #fff;
-}
-
-/* ── MENU ── */
-.menu-hero {
-  text-align: center;
-  padding: 24px 0 20px;
-}
-.menu-hero .hero-icon { font-size: 56px; margin-bottom: 8px; }
-.menu-hero h1 { font-size: 26px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
-.menu-hero p { font-size: 13px; color: var(--muted); }
-.badge-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin: 12px 0 20px; }
-.badge { font-size: 11px; font-weight: 600; padding: 4px 12px; border-radius: 99px; }
-.badge-blue { background: rgba(79,70,229,.25); color: #818CF8; }
-.badge-green { background: rgba(16,185,129,.2); color: #34D399; }
-
-.toggle-card {
-  background: var(--surface);
-  border-radius: var(--radius);
-  padding: 14px 16px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 16px;
-  border: 1px solid var(--border);
-}
-.toggle-info .tl { font-size: 14px; font-weight: 600; color: var(--text); }
-.toggle-info .td { font-size: 12px; color: var(--muted); margin-top: 2px; }
-.sw { position: relative; width: 50px; height: 28px; flex-shrink: 0; }
-.sw input { opacity: 0; width: 0; height: 0; position: absolute; }
-.sl {
-  position: absolute; inset: 0; border-radius: 99px;
-  background: #334155; cursor: pointer;
-  transition: background .25s;
-  border: 2px solid rgba(255,255,255,.1);
-}
-.sw input:checked + .sl { background: var(--accent); border-color: var(--accent); }
-.sl:before {
-  content: "";
-  position: absolute;
-  height: 20px; width: 20px;
-  left: 2px; top: 2px;
-  border-radius: 50%;
-  background: #fff;
-  transition: transform .25s;
-  box-shadow: 0 2px 4px rgba(0,0,0,.3);
-}
-.sw input:checked + .sl:before { transform: translateX(22px); }
-
-.section-label { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
-.topics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
-.topic-btn {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px 12px;
-  cursor: pointer;
-  text-align: center;
-  transition: transform .12s, border-color .12s;
-  -webkit-tap-highlight-color: transparent;
-  min-height: 90px;
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
-}
-.topic-btn:active { transform: scale(.96); }
-.topic-emoji { font-size: 28px; }
-.topic-name { font-size: 13px; font-weight: 600; color: var(--text); line-height: 1.3; }
-.topic-desc { font-size: 10px; color: var(--muted); }
-
-.exam-card {
-  background: linear-gradient(135deg, #4F46E5, #7C3AED);
-  border-radius: var(--radius);
-  padding: 18px 16px;
-  cursor: pointer;
-  text-align: center;
-  border: none;
-  width: 100%;
-  margin-bottom: 8px;
-  transition: transform .12s;
-}
-.exam-card:active { transform: scale(.98); }
-.exam-card .ec-title { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 4px; }
-.exam-card .ec-sub { font-size: 12px; color: rgba(255,255,255,.75); }
-
-/* ── GAME ── */
-.game-screen { padding: 12px 16px 24px; }
-.hud {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 10px;
-}
-.hearts { display: flex; gap: 5px; }
-.heart { font-size: 22px; transition: transform .2s; }
-.heart.lost { filter: grayscale(1); opacity: .3; }
-
-.topic-pill {
-  font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 99px;
-  max-width: 150px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
-}
+:root{--bg:#1a1a2e;--surface:#16213e;--accent:#4F46E5;--accent2:#7C3AED;--green:#10B981;--red:#EF4444;--amber:#F59E0B;--text:#F1F5F9;--muted:#94A3B8;--border:rgba(255,255,255,0.1);--radius:16px;--safe-top:env(safe-area-inset-top,0px);--safe-bot:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:var(--bg)}
+body{font-family:-apple-system,'Segoe UI',sans-serif;color:var(--text)}
+.hide{display:none!important}
+#app{height:100%;display:flex;flex-direction:column;padding-top:var(--safe-top);padding-bottom:var(--safe-bot);overflow:hidden}
+.screen{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:16px 16px 24px}
+#splash{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;background:var(--bg)}
+.splash-icon{font-size:72px;animation:pop .5s ease}
+.splash-title{font-size:28px;font-weight:700;color:var(--text);text-align:center}
+.splash-sub{font-size:14px;color:var(--muted);text-align:center}
+@keyframes pop{0%{transform:scale(.5);opacity:0}80%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+.app-header{display:flex;align-items:center;padding:12px 16px 8px;padding-top:calc(12px + var(--safe-top));background:var(--bg);border-bottom:1px solid var(--border);gap:10px}
+.back-btn{width:36px;height:36px;border-radius:50%;background:var(--surface);border:none;color:var(--text);font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.header-title{font-size:16px;font-weight:600;flex:1}
+.header-score{font-size:14px;font-weight:700;background:var(--accent);padding:4px 12px;border-radius:99px;color:#fff}
+.menu-hero{text-align:center;padding:24px 0 20px}
+.menu-hero .hero-icon{font-size:56px;margin-bottom:8px}
+.menu-hero h1{font-size:26px;font-weight:800;color:var(--text);margin-bottom:4px}
+.menu-hero p{font-size:13px;color:var(--muted)}
+.badge-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px 0 20px}
+.badge{font-size:11px;font-weight:600;padding:4px 12px;border-radius:99px}
+.badge-blue{background:rgba(79,70,229,.25);color:#818CF8}
+.badge-green{background:rgba(16,185,129,.2);color:#34D399}
+.toggle-card{background:var(--surface);border-radius:var(--radius);padding:14px 16px;display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;border:1px solid var(--border)}
+.toggle-info .tl{font-size:14px;font-weight:600;color:var(--text)}
+.toggle-info .td{font-size:12px;color:var(--muted);margin-top:2px}
+.sw{position:relative;width:50px;height:28px;flex-shrink:0}
+.sw input{opacity:0;width:0;height:0;position:absolute}
+.sl{position:absolute;inset:0;border-radius:99px;background:#334155;cursor:pointer;transition:background .25s;border:2px solid rgba(255,255,255,.1)}
+.sw input:checked+.sl{background:var(--accent);border-color:var(--accent)}
+.sl:before{content:"";position:absolute;height:20px;width:20px;left:2px;top:2px;border-radius:50%;background:#fff;transition:transform .25s;box-shadow:0 2px 4px rgba(0,0,0,.3)}
+.sw input:checked+.sl:before{transform:translateX(22px)}
+.section-label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.topics-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.topic-btn{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:16px 12px;cursor:pointer;text-align:center;transition:transform .12s;min-height:90px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
+.topic-btn:active{transform:scale(.96)}
+.topic-emoji{font-size:28px}
+.topic-name{font-size:13px;font-weight:600;color:var(--text);line-height:1.3}
+.topic-desc{font-size:10px;color:var(--muted)}
+.exam-card{background:linear-gradient(135deg,#4F46E5,#7C3AED);border-radius:var(--radius);padding:18px 16px;cursor:pointer;text-align:center;border:none;width:100%;margin-bottom:8px;transition:transform .12s}
+.exam-card:active{transform:scale(.98)}
+.exam-card .ec-title{font-size:16px;font-weight:700;color:#fff;margin-bottom:4px}
+.exam-card .ec-sub{font-size:12px;color:rgba(255,255,255,.75)}
+.game-screen{padding:12px 16px 24px}
+.hud{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.hearts{display:flex;gap:5px}
+.heart{font-size:22px;transition:transform .2s}
+.heart.lost{filter:grayscale(1);opacity:.3}
+.topic-pill{font-size:11px;font-weight:700;padding:4px 12px;border-radius:99px;max-width:150px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
 .p0{background:rgba(56,189,248,.2);color:#38BDF8}
 .p1{background:rgba(52,211,153,.2);color:#34D399}
 .p2{background:rgba(251,191,36,.2);color:#FBBF24}
@@ -196,175 +67,96 @@ body { font-family: -apple-system, 'Segoe UI', sans-serif; color: var(--text); }
 .p4{background:rgba(167,139,250,.2);color:#A78BFA}
 .p5{background:rgba(74,222,128,.2);color:#4ADE80}
 .p6{background:rgba(251,146,60,.2);color:#FB923C}
-
-.timer-wrap { height: 6px; background: rgba(255,255,255,.1); border-radius: 99px; margin-bottom: 14px; overflow: hidden; }
-.timer-bar { height: 100%; border-radius: 99px; transition: width .1s linear, background .3s; background: var(--accent); }
-.timer-off { height: 6px; background: rgba(255,255,255,.08); border-radius: 99px; margin-bottom: 14px; }
-
-.q-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 18px 16px;
-  margin-bottom: 12px;
-}
-.q-meta { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px; }
-.sp-tag {
-  display: inline-block; font-size: 10px; font-weight: 700;
-  padding: 3px 10px; border-radius: 99px;
-  background: rgba(251,146,60,.2); color: #FB923C;
-  margin-bottom: 8px;
-}
-.q-text { font-size: 18px; font-weight: 600; color: var(--text); line-height: 1.5; white-space: pre-wrap; }
-.q-hint {
-  font-size: 12px; color: var(--muted); font-style: italic;
-  margin-top: 10px; padding: 8px 10px;
-  background: rgba(255,255,255,.04);
-  border-left: 3px solid var(--accent);
-  border-radius: 0 8px 8px 0;
-}
-.q-feedback { min-height: 22px; font-size: 14px; font-weight: 600; margin-top: 8px; }
-.q-feedback.ok { color: var(--green); }
-.q-feedback.err { color: var(--red); }
-
-.hint-row { text-align: right; margin-bottom: 10px; }
-.hint-btn {
-  font-size: 12px; padding: 6px 14px;
-  background: rgba(255,255,255,.06);
-  border: 1px solid var(--border);
-  border-radius: 99px;
-  color: var(--muted); cursor: pointer;
-  transition: opacity .2s;
-}
-.hint-btn:disabled { opacity: .4; cursor: not-allowed; }
-
-.choices { display: grid; gap: 10px; margin-bottom: 12px; }
-.ch2 { grid-template-columns: 1fr 1fr; }
-.ch1 { grid-template-columns: 1fr; }
-.choice {
-  padding: 16px 12px;
-  border: 2px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
-  font-size: 17px; font-weight: 600;
-  color: var(--text); cursor: pointer;
-  text-align: center; line-height: 1.4;
-  min-height: 56px;
-  display: flex; align-items: center; justify-content: center;
-  transition: border-color .12s, background .12s, transform .1s;
-}
-.choice:active:not(:disabled) { transform: scale(.97); }
-.choice.cok { border-color: var(--green) !important; background: rgba(16,185,129,.15) !important; color: var(--green) !important; }
-.choice.cerr { border-color: var(--red) !important; background: rgba(239,68,68,.12) !important; color: var(--red) !important; }
-.choice:disabled { cursor: not-allowed; }
-
-.progress-row { display: flex; align-items: center; justify-content: space-between; }
-.prog-bar-w { flex: 1; height: 4px; background: rgba(255,255,255,.1); border-radius: 99px; margin-right: 10px; overflow: hidden; }
-.prog-bar { height: 100%; background: var(--accent); border-radius: 99px; transition: width .4s ease; }
-.prog-txt { font-size: 12px; color: var(--muted); white-space: nowrap; }
-
-/* ── RESULT ── */
-.result-hero {
-  text-align: center; padding: 28px 0 20px;
-}
-.result-hero .r-icon { font-size: 64px; margin-bottom: 10px; animation: pop .4s ease; }
-.result-hero .r-title { font-size: 24px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
-.result-hero .r-score { font-size: 52px; font-weight: 800; color: var(--accent); margin: 8px 0; line-height: 1; }
-.result-hero .r-msg { font-size: 14px; color: var(--muted); }
-
-.stat-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 16px; }
-.stat-box { background: var(--surface); border-radius: var(--radius); padding: 14px 8px; text-align: center; border: 1px solid var(--border); }
-.stat-n { font-size: 24px; font-weight: 800; }
-.stat-l { font-size: 11px; color: var(--muted); margin-top: 3px; }
-
-.rev-title { font-size: 12px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .1em; margin-bottom: 10px; }
-.rev-list { display: flex; flex-direction: column; gap: 7px; margin-bottom: 20px; }
-.rev-item {
-  display: flex; align-items: flex-start; gap: 10px;
-  padding: 10px 12px;
-  border-radius: 12px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-}
-.rev-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; margin-top: 3px; }
-.rdok { background: var(--green); }
-.rderr { background: var(--red); }
-.rev-q { font-size: 12px; color: var(--muted); flex: 1; line-height: 1.5; }
-.rev-a { font-size: 12px; font-weight: 700; color: var(--text); flex-shrink: 0; }
-
-.btn-primary {
-  width: 100%; padding: 16px;
-  border: none; border-radius: var(--radius);
-  font-size: 16px; font-weight: 700;
-  cursor: pointer; margin-bottom: 10px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  color: #fff;
-  transition: transform .12s;
-}
-.btn-primary:active { transform: scale(.98); }
-.btn-secondary {
-  width: 100%; padding: 14px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  font-size: 14px; font-weight: 600;
-  color: var(--muted); background: transparent; cursor: pointer;
-  transition: background .15s;
-}
-.btn-secondary:active { background: var(--surface); }
+.timer-wrap{height:6px;background:rgba(255,255,255,.1);border-radius:99px;margin-bottom:14px;overflow:hidden}
+.timer-bar{height:100%;border-radius:99px;transition:width .1s linear,background .3s;background:var(--accent)}
+.timer-off{height:6px;background:rgba(255,255,255,.08);border-radius:99px;margin-bottom:14px}
+.q-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 16px;margin-bottom:12px}
+.q-meta{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.sp-tag{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:99px;background:rgba(251,146,60,.2);color:#FB923C;margin-bottom:8px}
+.q-text{font-size:18px;font-weight:600;color:var(--text);line-height:1.5;white-space:pre-wrap}
+.q-hint{font-size:12px;color:var(--muted);font-style:italic;margin-top:10px;padding:8px 10px;background:rgba(255,255,255,.04);border-left:3px solid var(--accent);border-radius:0 8px 8px 0}
+.q-feedback{min-height:22px;font-size:14px;font-weight:600;margin-top:8px}
+.q-feedback.ok{color:var(--green)}
+.q-feedback.err{color:var(--red)}
+.hint-row{text-align:right;margin-bottom:10px}
+.hint-btn{font-size:12px;padding:6px 14px;background:rgba(255,255,255,.06);border:1px solid var(--border);border-radius:99px;color:var(--muted);cursor:pointer;transition:opacity .2s}
+.hint-btn:disabled{opacity:.4;cursor:not-allowed}
+.choices{display:grid;gap:10px;margin-bottom:12px}
+.ch2{grid-template-columns:1fr 1fr}
+.ch1{grid-template-columns:1fr}
+.choice{padding:16px 12px;border:2px solid var(--border);border-radius:var(--radius);background:var(--surface);font-size:17px;font-weight:600;color:var(--text);cursor:pointer;text-align:center;line-height:1.4;min-height:56px;display:flex;align-items:center;justify-content:center;transition:border-color .12s,background .12s,transform .1s}
+.choice:active:not(:disabled){transform:scale(.97)}
+.choice.cok{border-color:var(--green)!important;background:rgba(16,185,129,.15)!important;color:var(--green)!important}
+.choice.cerr{border-color:var(--red)!important;background:rgba(239,68,68,.12)!important;color:var(--red)!important}
+.choice:disabled{cursor:not-allowed}
+.progress-row{display:flex;align-items:center;justify-content:space-between}
+.prog-bar-w{flex:1;height:4px;background:rgba(255,255,255,.1);border-radius:99px;margin-right:10px;overflow:hidden}
+.prog-bar{height:100%;background:var(--accent);border-radius:99px;transition:width .4s ease}
+.prog-txt{font-size:12px;color:var(--muted);white-space:nowrap}
+.result-hero{text-align:center;padding:28px 0 20px}
+.result-hero .r-icon{font-size:64px;margin-bottom:10px;animation:pop .4s ease}
+.result-hero .r-title{font-size:24px;font-weight:800;color:var(--text);margin-bottom:4px}
+.result-hero .r-score{font-size:52px;font-weight:800;color:var(--accent);margin:8px 0;line-height:1}
+.result-hero .r-msg{font-size:14px;color:var(--muted)}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px}
+.stat-box{background:var(--surface);border-radius:var(--radius);padding:14px 8px;text-align:center;border:1px solid var(--border)}
+.stat-n{font-size:24px;font-weight:800}
+.stat-l{font-size:11px;color:var(--muted);margin-top:3px}
+.rev-title{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.rev-list{display:flex;flex-direction:column;gap:7px;margin-bottom:20px}
+.rev-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:12px;background:var(--surface);border:1px solid var(--border)}
+.rev-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;margin-top:3px}
+.rdok{background:var(--green)}
+.rderr{background:var(--red)}
+.rev-q{font-size:12px;color:var(--muted);flex:1;line-height:1.5}
+.rev-a{font-size:12px;font-weight:700;color:var(--text);flex-shrink:0}
+.btn-primary{width:100%;padding:16px;border:none;border-radius:var(--radius);font-size:16px;font-weight:700;cursor:pointer;margin-bottom:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;transition:transform .12s}
+.btn-primary:active{transform:scale(.98)}
+.btn-secondary{width:100%;padding:14px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;font-weight:600;color:var(--muted);background:transparent;cursor:pointer}
 </style>
 </head>
 <body>
 
-<!-- SPLASH -->
 <div id="splash">
   <div class="splash-icon">🎓</div>
   <div class="splash-title">Maths Aventure QC</div>
-  <div class="splash-sub">Chargement...</div>
+  <div class="splash-sub">Chargement…</div>
 </div>
 
-<!-- APP -->
 <div id="app" class="hide">
 
-  <!-- MENU -->
   <div id="smenu" class="screen">
     <div class="menu-hero">
       <div class="hero-icon">🎓</div>
       <h1>Maths Aventure QC</h1>
-      <p>Programme MEQ &bull; 4e annee du primaire</p>
+      <p>Programme MEQ · 4e année du primaire</p>
     </div>
     <div class="badge-row">
       <span class="badge badge-blue">2e cycle</span>
-      <span class="badge badge-green">Evaluations de juin</span>
+      <span class="badge badge-green">Évaluations de juin</span>
     </div>
-
     <div class="toggle-card">
       <div class="toggle-info">
-        <div class="tl">Sans chronomettre</div>
-        <div class="td">Apprends a ton propre rythme</div>
+        <div class="tl">Sans chronomètre</div>
+        <div class="td">Apprends à ton propre rythme</div>
       </div>
-      <label class="sw">
-        <input type="checkbox" id="ckChrono">
-        <span class="sl"></span>
-      </label>
+      <label class="sw"><input type="checkbox" id="ckChrono"><span class="sl"></span></label>
     </div>
-
-    <p class="section-label">Choisir un theme</p>
+    <p class="section-label">Choisir un thème</p>
     <div class="topics-grid" id="menuGrid"></div>
-
     <button class="exam-card" onclick="startExam()">
       <div class="ec-title">Simulation MEQ</div>
-      <div class="ec-sub">Tous les themes melanges &bull; 15 questions &bull; Style evaluation de juin</div>
+      <div class="ec-sub">Tous les thèmes mélangés · 15 questions · Style évaluation de juin</div>
     </button>
   </div>
 
-  <!-- GAME -->
   <div id="sgame" class="hide">
-    <div class="app-header" id="gameHeader">
+    <div class="app-header">
       <button class="back-btn" onclick="goMenu()">&#8592;</button>
       <div class="header-title" id="headerTitle"></div>
       <div class="header-score">Score : <span id="scVal">0</span></div>
     </div>
-    <div class="screen game-screen" style="padding-top:8px">
+    <div class="screen game-screen">
       <div class="hud">
         <div class="hearts" id="heartsEl"></div>
         <div class="topic-pill" id="pillEl"></div>
@@ -372,13 +164,13 @@ body { font-family: -apple-system, 'Segoe UI', sans-serif; color: var(--text); }
       <div id="timerEl"></div>
       <div class="q-card">
         <div class="q-meta" id="qmeta"></div>
-        <div id="sptagEl" class="sp-tag hide">Situation-probleme</div>
+        <div id="sptagEl" class="sp-tag hide">Situation-problème</div>
         <div class="q-text" id="qtxt"></div>
         <div class="q-hint hide" id="qhint"></div>
         <div class="q-feedback" id="qfb"></div>
       </div>
       <div class="hint-row">
-        <button class="hint-btn" id="hbtn" onclick="showHint()">Voir l&#39;indice 💡</button>
+        <button class="hint-btn" id="hbtn" onclick="showHint()">Voir l'indice 💡</button>
       </div>
       <div class="choices" id="choicesEl"></div>
       <div class="progress-row">
@@ -388,7 +180,6 @@ body { font-family: -apple-system, 'Segoe UI', sans-serif; color: var(--text); }
     </div>
   </div>
 
-  <!-- RESULT -->
   <div id="sresult" class="hide">
     <div class="screen">
       <div class="result-hero">
@@ -398,166 +189,149 @@ body { font-family: -apple-system, 'Segoe UI', sans-serif; color: var(--text); }
         <div class="r-msg" id="rmsg"></div>
       </div>
       <div class="stat-row">
-        <div class="stat-box"><div class="stat-n" style="color:#34D399" id="stok">0</div><div class="stat-l">Bonnes reponses</div></div>
+        <div class="stat-box"><div class="stat-n" style="color:#34D399" id="stok">0</div><div class="stat-l">Bonnes réponses</div></div>
         <div class="stat-box"><div class="stat-n" style="color:#F87171" id="sterr">0</div><div class="stat-l">Erreurs</div></div>
-        <div class="stat-box"><div class="stat-n" style="color:#A78BFA" id="stpct">0%</div><div class="stat-l">Resultat</div></div>
+        <div class="stat-box"><div class="stat-n" style="color:#A78BFA" id="stpct">0%</div><div class="stat-l">Résultat</div></div>
       </div>
-      <p class="rev-title">Revision des reponses</p>
+      <p class="rev-title">Révision des réponses</p>
       <div class="rev-list" id="revEl"></div>
       <button class="btn-primary" onclick="replay()">Rejouer 🔄</button>
-      <button class="btn-secondary" onclick="goMenu()">Choisir un autre theme</button>
+      <button class="btn-secondary" onclick="goMenu()">Choisir un autre thème</button>
     </div>
   </div>
 
 </div>
 
 <script>
-// ── UTILS ──
 function rnd(a,b){return Math.floor(Math.random()*(b-a+1))+a;}
 function pick(arr){return arr[Math.floor(Math.random()*arr.length)];}
 function shuf(arr){var a=arr.slice();for(var i=a.length-1;i>0;i--){var j=rnd(0,i);var t=a[i];a[i]=a[j];a[j]=t;}return a;}
 function mkC(correct,pool,n){
-  n=n||4; var s=[String(correct)], tries=0;
+  n=n||4;var s=[String(correct)],tries=0;
   while(s.length<n&&tries<300){var c=String(pool[Math.floor(Math.random()*pool.length)]);if(s.indexOf(c)<0)s.push(c);tries++;}
   return shuf(s);
 }
 function vars(c,d){var v=[];for(var i=-4;i<=4;i++){if(i!==0)v.push(c+i*d);}return v.filter(function(x){return x>=0;});}
 
-// ── GENERATORS ──
 function genNombres(){
   var t=rnd(0,4);
-  if(t===0){var n=rnd(1000,9999),pos=rnd(0,3),pn=["unite","dizaine","centaine","millier"],d=parseInt(String(n)[3-pos]);return{text:"Dans le nombre "+n+", quel chiffre est au rang des "+pn[pos]+"s ?",hint:"Unites a droite, puis dizaines, centaines, milliers vers la gauche.",correct:String(d),choices:mkC(d,[0,1,2,3,4,5,6,7,8,9]),sp:false};}
-  if(t===1){var a=rnd(1000,9999),b=rnd(1000,9999),c=a>b?String(a):String(b);var p=shuf([String(a),String(b),String(rnd(1000,9999)),String(rnd(1000,9999))]).filter(function(v,i,arr){return arr.indexOf(v)===i;}).slice(0,4);return{text:"Lequel est le plus GRAND ?\n"+a+"  ou  "+b,hint:"Compare de gauche a droite, rang par rang.",correct:c,choices:p,sp:false};}
-  if(t===2){var n=rnd(200,9800),cent=Math.round(n/100)*100;return{text:"Arrondis "+n+" a la centaine pres.",hint:"Dizaines >= 50 : arrondir vers le haut. Sinon vers le bas.",correct:String(cent),choices:mkC(cent,[Math.floor(n/100)*100,Math.ceil(n/100)*100,cent+200,Math.max(0,cent-200)]),sp:false};}
-  if(t===3){var m=rnd(1,9),c2=rnd(0,9),d=rnd(0,9),u=rnd(0,9),n=m*1000+c2*100+d*10+u;return{text:"Quel nombre correspond a :\n"+m+" x 1000 + "+c2+" x 100 + "+d+" x 10 + "+u,hint:"Multiplie chaque chiffre par sa valeur de position.",correct:String(n),choices:mkC(n,[m*1000+c2*100+u*10+d,m*1000+d*100+c2*10+u,n+rnd(1,9),n+rnd(10,99)]),sp:false};}
+  if(t===0){var n=rnd(1000,9999),pos=rnd(0,3),pn=["unité","dizaine","centaine","millier"],digit=parseInt(String(n)[3-pos]);return{text:"Dans le nombre "+n+", quel chiffre est au rang des "+pn[pos]+"s ?",hint:"Les unités sont à droite, puis les dizaines, centaines, milliers vers la gauche.",correct:String(digit),choices:mkC(digit,[0,1,2,3,4,5,6,7,8,9]),sp:false};}
+  if(t===1){var a=rnd(1000,9999),b=rnd(1000,9999),c=a>b?String(a):String(b),p=shuf([String(a),String(b),String(rnd(1000,9999)),String(rnd(1000,9999))]).filter(function(v,i,arr){return arr.indexOf(v)===i;}).slice(0,4);return{text:"Lequel est le plus GRAND ?\n"+a+"  ou  "+b,hint:"Compare de gauche à droite, rang par rang.",correct:c,choices:p,sp:false};}
+  if(t===2){var n=rnd(200,9800),cent=Math.round(n/100)*100;return{text:"Arrondis "+n+" à la centaine près.",hint:"Si les dizaines sont 50 ou plus, arrondis vers le haut. Sinon vers le bas.",correct:String(cent),choices:mkC(cent,[Math.floor(n/100)*100,Math.ceil(n/100)*100,cent+200,Math.max(0,cent-200)]),sp:false};}
+  if(t===3){var m=rnd(1,9),c2=rnd(0,9),d=rnd(0,9),u=rnd(0,9),n=m*1000+c2*100+d*10+u;return{text:"Quel nombre correspond à :\n"+m+" × 1000 + "+c2+" × 100 + "+d+" × 10 + "+u,hint:"Multiplie chaque chiffre par sa valeur de position, puis additionne.",correct:String(n),choices:mkC(n,[m*1000+c2*100+u*10+d,m*1000+d*100+c2*10+u,n+rnd(1,9),n+rnd(10,99)]),sp:false};}
   var nums=[rnd(1000,5000),rnd(1000,5000),rnd(1000,5000),rnd(1000,5000)],correct=String(Math.min.apply(null,nums));
-  return{text:"Lequel est le plus PETIT ?\n"+nums.join(" - "),hint:"Le plus petit vient en premier dans l'ordre croissant.",correct:correct,choices:nums.map(String),sp:false};
+  return{text:"Lequel est le plus PETIT ?\n"+nums.join(" — "),hint:"Le plus petit vient en premier dans l'ordre croissant.",correct:correct,choices:nums.map(String),sp:false};
 }
 
 function genAddSub(){
   var t=rnd(0,3);
-  if(t===0){var a=rnd(1000,5000),b=rnd(1000,4000),r=a+b;return{text:a+" + "+b+" = ?",hint:"Additionne colonne par colonne en partant des unites.",correct:String(r),choices:mkC(r,vars(r,100)),sp:false};}
-  if(t===1){var b=rnd(1000,4000),a=rnd(b,b+3000),r=a-b;return{text:a+" - "+b+" = ?",hint:"Soustrais de droite a gauche, n'oublie pas les retenues.",correct:String(r),choices:mkC(r,vars(r,100)),sp:false};}
-  if(t===2){var av=rnd(10,99)/10,bv=rnd(10,99)/10,r=Math.round((av+bv)*10)/10;var pool=[r+0.1,r-0.1,r+1,Math.max(0,r-1)].map(function(x){return x.toFixed(1).replace(".",",");});return{text:av.toFixed(1).replace(".",",")+" + "+bv.toFixed(1).replace(".",",")+" = ?",hint:"Aligne les virgules, additionne comme des entiers.",correct:r.toFixed(1).replace(".",","),choices:mkC(r.toFixed(1).replace(".",","),pool),sp:false};}
-  var bv=rnd(10,50)/10,av=bv+rnd(10,50)/10,r=Math.round((av-bv)*10)/10;var pool=[r+0.1,r-0.1,r+1,Math.max(0,r-1)].map(function(x){return x.toFixed(1).replace(".",",");});
-  return{text:av.toFixed(1).replace(".",",")+" - "+bv.toFixed(1).replace(".",",")+" = ?",hint:"Aligne les virgules, soustrais colonne par colonne.",correct:r.toFixed(1).replace(".",","),choices:mkC(r.toFixed(1).replace(".",","),pool),sp:false};
+  if(t===0){var a=rnd(1000,5000),b=rnd(1000,4000),r=a+b;return{text:a+" + "+b+" = ?",hint:"Additionne colonne par colonne en partant des unités.",correct:String(r),choices:mkC(r,vars(r,100)),sp:false};}
+  if(t===1){var b=rnd(1000,4000),a=rnd(b,b+3000),r=a-b;return{text:a+" − "+b+" = ?",hint:"Soustrais de droite à gauche. N'oublie pas les retenues.",correct:String(r),choices:mkC(r,vars(r,100)),sp:false};}
+  if(t===2){var av=rnd(10,99)/10,bv=rnd(10,99)/10,r=Math.round((av+bv)*10)/10,pool=[r+0.1,r-0.1,r+1,Math.max(0,r-1)].map(function(x){return x.toFixed(1).replace(".",",");});return{text:av.toFixed(1).replace(".",",")+" + "+bv.toFixed(1).replace(".",",")+" = ?",hint:"Aligne les virgules, puis additionne comme des nombres entiers.",correct:r.toFixed(1).replace(".",","),choices:mkC(r.toFixed(1).replace(".",","),pool),sp:false};}
+  var bv=rnd(10,50)/10,av=bv+rnd(10,50)/10,r=Math.round((av-bv)*10)/10,pool=[r+0.1,r-0.1,r+1,Math.max(0,r-1)].map(function(x){return x.toFixed(1).replace(".",",");});
+  return{text:av.toFixed(1).replace(".",",")+" − "+bv.toFixed(1).replace(".",",")+" = ?",hint:"Aligne les virgules, puis soustrais colonne par colonne.",correct:r.toFixed(1).replace(".",","),choices:mkC(r.toFixed(1).replace(".",","),pool),sp:false};
 }
 
 function genMulDiv(){
   var t=rnd(0,3);
-  if(t===0){var a=rnd(2,10),b=rnd(2,10),r=a*b;return{text:a+" x "+b+" = ?",hint:"Utilise ta table de multiplication.",correct:String(r),choices:mkC(r,vars(r,Math.max(2,Math.floor(r/5)))),sp:false};}
-  if(t===1){var b=rnd(2,9),c=rnd(2,10),a=b*c;return{text:a+" / "+b+" = ?",hint:"Division : combien de fois b entre dans a ?",correct:String(c),choices:mkC(c,vars(c,2)),sp:false};}
-  if(t===2){var a=rnd(10,99),b=rnd(2,9),r=a*b;return{text:a+" x "+b+" = ?",hint:"Decompose en unites et dizaines, multiplie chaque partie.",correct:String(r),choices:mkC(r,vars(r,Math.max(5,Math.floor(r/10)))),sp:false};}
+  if(t===0){var a=rnd(2,10),b=rnd(2,10),r=a*b;return{text:a+" × "+b+" = ?",hint:"Utilise ta table de multiplication.",correct:String(r),choices:mkC(r,vars(r,Math.max(2,Math.floor(r/5)))),sp:false};}
+  if(t===1){var b=rnd(2,9),c=rnd(2,10),a=b*c;return{text:a+" ÷ "+b+" = ?",hint:"Division : combien de fois b entre dans a ?",correct:String(c),choices:mkC(c,vars(c,2)),sp:false};}
+  if(t===2){var a=rnd(10,99),b=rnd(2,9),r=a*b;return{text:a+" × "+b+" = ?",hint:"Décompose en unités et dizaines, multiplie chaque partie puis additionne.",correct:String(r),choices:mkC(r,vars(r,Math.max(5,Math.floor(r/10)))),sp:false};}
   var a=rnd(3,8),b=rnd(3,8),c=rnd(2,5),r=a*b*c;
-  return{text:a+" x "+b+" x "+c+" = ?",hint:"Commence par deux nombres, puis multiplie le resultat par le troisieme.",correct:String(r),choices:mkC(r,vars(r,Math.floor(r/5))),sp:false};
+  return{text:a+" × "+b+" × "+c+" = ?",hint:"Commence par deux nombres, puis multiplie le résultat par le troisième.",correct:String(r),choices:mkC(r,vars(r,Math.floor(r/5))),sp:false};
 }
 
 function genFractions(){
   var t=rnd(0,3);
-  if(t===0){var ds=[2,3,4,6,8],d=pick(ds),n=rnd(1,d-1);var pool=[];ds.forEach(function(den){for(var i=1;i<den;i++)pool.push(i+"/"+den);});pool=pool.filter(function(f){return f!==n+"/"+d;});return{text:"Quelle fraction represente "+n+" partie(s) sur "+d+" parties egales ?",hint:"Numerateur = parties choisies. Denominateur = parties totales.",correct:n+"/"+d,choices:mkC(n+"/"+d,pool),sp:false};}
-  if(t===1){var pairs=[[1,2,2,4],[1,2,3,6],[1,3,2,6],[2,4,1,2],[3,6,1,2],[2,3,4,6],[1,4,2,8]],p=pick(pairs),correct=p[2]+"/"+p[3];return{text:"Quelle fraction est equivalente a "+p[0]+"/"+p[1]+" ?",hint:"Multiplie numerateur ET denominateur par le meme nombre.",correct:correct,choices:mkC(correct,[p[2]+1+"/"+p[3],p[0]+"/"+(p[1]+1),p[2]+"/"+(p[3]+2),"1/5"]),sp:false};}
-  if(t===2){var d=pick([4,6,8,10]),a=rnd(1,d-1),b=rnd(1,d-1),correct=a>b?a+"/"+d:b+"/"+d;var cands=shuf([a+"/"+d,b+"/"+d,rnd(1,d-1)+"/"+d,rnd(1,d-1)+"/"+d]).filter(function(v,i,arr){return arr.indexOf(v)===i;}).slice(0,4);return{text:"Laquelle est la plus grande ?\n"+a+"/"+d+"  ou  "+b+"/"+d,hint:"Meme denominateur : le plus grand numerateur = la plus grande fraction.",correct:correct,choices:cands,sp:false};}
-  var d=pick([4,6,8]),nums=[rnd(1,d-1),rnd(1,d-1),rnd(1,d-1),rnd(1,d-1)];
-  var fracs=nums.filter(function(v,i,arr){return arr.indexOf(v)===i;}).map(function(n){return{s:n+"/"+d,v:n/d};});
+  if(t===0){var ds=[2,3,4,6,8],d=pick(ds),n=rnd(1,d-1),pool=[];ds.forEach(function(den){for(var i=1;i<den;i++)pool.push(i+"/"+den);});pool=pool.filter(function(f){return f!==n+"/"+d;});return{text:"Quelle fraction représente "+n+" partie(s) sur "+d+" parties égales ?",hint:"Numérateur = parties choisies. Dénominateur = parties totales.",correct:n+"/"+d,choices:mkC(n+"/"+d,pool),sp:false};}
+  if(t===1){var pairs=[[1,2,2,4],[1,2,3,6],[1,3,2,6],[2,4,1,2],[3,6,1,2],[2,3,4,6],[1,4,2,8]],p=pick(pairs),correct=p[2]+"/"+p[3];return{text:"Quelle fraction est équivalente à "+p[0]+"/"+p[1]+" ?",hint:"Multiplie le numérateur ET le dénominateur par le même nombre.",correct:correct,choices:mkC(correct,[p[2]+1+"/"+p[3],p[0]+"/"+(p[1]+1),p[2]+"/"+(p[3]+2),"1/5"]),sp:false};}
+  if(t===2){var d=pick([4,6,8,10]),a=rnd(1,d-1),b=rnd(1,d-1),correct=a>b?a+"/"+d:b+"/"+d,cands=shuf([a+"/"+d,b+"/"+d,rnd(1,d-1)+"/"+d,rnd(1,d-1)+"/"+d]).filter(function(v,i,arr){return arr.indexOf(v)===i;}).slice(0,4);return{text:"Laquelle est la plus grande ?\n"+a+"/"+d+"  ou  "+b+"/"+d,hint:"Même dénominateur : le plus grand numérateur = la plus grande fraction.",correct:correct,choices:cands,sp:false};}
+  var d=pick([4,6,8]),nums=[rnd(1,d-1),rnd(1,d-1),rnd(1,d-1),rnd(1,d-1)],fracs=nums.filter(function(v,i,arr){return arr.indexOf(v)===i;}).map(function(n){return{s:n+"/"+d,v:n/d};});
   if(fracs.length<3)return genFractions();
   var mn=fracs.reduce(function(a,b){return a.v<b.v?a:b;});
-  return{text:"Laquelle est la plus PETITE ?\n"+fracs.map(function(f){return f.s;}).join("  -  "),hint:"Compare les numerateurs quand le denominateur est identique.",correct:mn.s,choices:fracs.map(function(f){return f.s;}),sp:false};
+  return{text:"Laquelle est la plus PETITE ?\n"+fracs.map(function(f){return f.s;}).join("  —  "),hint:"Compare les numérateurs quand le dénominateur est identique.",correct:mn.s,choices:fracs.map(function(f){return f.s;}),sp:false};
 }
 
 function genGeo(){
   var t=rnd(0,3);
-  if(t===0){var sh=pick([{n:"triangle",s:3},{n:"carre",s:4},{n:"rectangle",s:4},{n:"pentagone",s:5},{n:"hexagone",s:6},{n:"octogone",s:8}]);return{text:"Combien de cotes a un "+sh.n+" ?",hint:"tri=3, quadri=4, penta=5, hexa=6, octo=8.",correct:String(sh.s),choices:mkC(sh.s,["3","4","5","6","7","8"]),sp:false};}
-  if(t===1){var ang=pick([{t:"droit",d:90},{t:"aigu",d:45},{t:"obtus",d:120},{t:"aigu",d:30},{t:"obtus",d:150}]);return{text:"Un angle de "+ang.d+"degrees est un angle :",hint:"Droit = 90 degrees. Aigu < 90. Obtus > 90.",correct:ang.t,choices:["droit","aigu","obtus"],sp:false};}
-  if(t===2){var qs=[{q:"Combien d'axes de symetrie a un carre ?",c:"4",p:["1","2","3","4"]},{q:"Combien d'axes de symetrie a un rectangle non carre ?",c:"2",p:["0","1","2","4"]},{q:"Combien d'axes de symetrie a un triangle equilateral ?",c:"3",p:["1","2","3","0"]},{q:"Un cercle a-t-il des axes de symetrie ?",c:"Oui, une infinite",p:["Non","Oui, exactement 2","Oui, une infinite","Oui, exactement 4"]}],q=pick(qs);return{text:q.q,hint:"Un axe de symetrie partage la figure en deux parties superposables.",correct:q.c,choices:shuf(q.p),sp:false};}
-  var qs=[{q:"4 angles droits et 4 cotes egaux ?",c:"carre",p:["carre","rectangle","losange","trapeze"]},{q:"4 angles droits mais cotes de longueurs differentes ?",c:"rectangle",p:["carre","rectangle","losange","trapeze"]},{q:"Exactement UNE paire de cotes paralleles ?",c:"trapeze",p:["carre","rectangle","losange","trapeze"]},{q:"4 cotes egaux sans forcement d'angles droits ?",c:"losange",p:["carre","rectangle","losange","trapeze"]}],q=pick(qs);
-  return{text:"Quel quadrilatere a : "+q.q,hint:"Carre : 4 cotes egaux + 4 angles droits. Rectangle : 4 angles droits. Losange : 4 cotes egaux. Trapeze : 1 paire parallele.",correct:q.c,choices:shuf(q.p),sp:false};
+  if(t===0){var sh=pick([{n:"triangle",s:3},{n:"carré",s:4},{n:"rectangle",s:4},{n:"pentagone",s:5},{n:"hexagone",s:6},{n:"octogone",s:8}]);return{text:"Combien de côtés a un "+sh.n+" ?",hint:"tri=3, quadri=4, penta=5, hexa=6, octo=8.",correct:String(sh.s),choices:mkC(sh.s,["3","4","5","6","7","8"]),sp:false};}
+  if(t===1){var ang=pick([{t:"droit",d:90},{t:"aigu",d:45},{t:"obtus",d:120},{t:"aigu",d:30},{t:"obtus",d:150}]);return{text:"Un angle de "+ang.d+"° est un angle :",hint:"Droit = exactement 90°. Aigu < 90°. Obtus > 90°.",correct:ang.t,choices:["droit","aigu","obtus"],sp:false};}
+  if(t===2){var qs=[{q:"Combien d'axes de symétrie a un carré ?",c:"4",p:["1","2","3","4"]},{q:"Combien d'axes de symétrie a un rectangle non carré ?",c:"2",p:["0","1","2","4"]},{q:"Combien d'axes de symétrie a un triangle équilatéral ?",c:"3",p:["1","2","3","0"]},{q:"Un cercle a-t-il des axes de symétrie ?",c:"Oui, une infinité",p:["Non","Oui, exactement 2","Oui, une infinité","Oui, exactement 4"]}],q=pick(qs);return{text:q.q,hint:"Un axe de symétrie partage la figure en deux parties superposables.",correct:q.c,choices:shuf(q.p),sp:false};}
+  var qs=[{q:"4 angles droits et 4 côtés égaux ?",c:"carré",p:["carré","rectangle","losange","trapèze"]},{q:"4 angles droits mais côtés de longueurs différentes ?",c:"rectangle",p:["carré","rectangle","losange","trapèze"]},{q:"Exactement UNE paire de côtés parallèles ?",c:"trapèze",p:["carré","rectangle","losange","trapèze"]},{q:"4 côtés égaux sans forcément d'angles droits ?",c:"losange",p:["carré","rectangle","losange","trapèze"]}],q=pick(qs);
+  return{text:"Quel quadrilatère a : "+q.q,hint:"Carré : 4 côtés égaux + 4 angles droits. Rectangle : 4 angles droits. Losange : 4 côtés égaux. Trapèze : 1 paire parallèle.",correct:q.c,choices:shuf(q.p),sp:false};
 }
 
 function genMesure(){
   var t=rnd(0,3);
-  if(t===0){var qs=[{q:"1 metre = ? centimetres",c:"100",p:["10","100","1000","50"]},{q:"1 kilometre = ? metres",c:"1000",p:["100","1000","10000","500"]},{q:"1 centimetre = ? millimetres",c:"10",p:["5","10","100","1000"]},{q:"250 centimetres = ? metres",c:"2,5",p:["2,5","25","0,25","250"]},{q:"3 km = ? m",c:"3000",p:["300","3000","30000","30"]}],q=pick(qs);return{text:q.q,hint:"km x1000=m. m x100=cm. cm x10=mm.",correct:q.c,choices:shuf(q.p),sp:false};}
-  if(t===1){var sub=rnd(0,2);if(sub===0){var s=rnd(2,12),r=4*s;return{text:"Perimetre d'un carre de "+s+" cm de cote ?",hint:"Perimetre du carre = 4 x cote.",correct:r+" cm",choices:mkC(r+" cm",vars(r,4).map(function(x){return x+" cm";})),sp:false};}if(sub===1){var l=rnd(5,15),w=rnd(2,l-1),r=2*(l+w);return{text:"Rectangle "+l+" cm x "+w+" cm.\nQuel est son perimetre ?",hint:"Perimetre du rectangle = 2 x (longueur + largeur).",correct:r+" cm",choices:mkC(r+" cm",vars(r,4).map(function(x){return x+" cm";})),sp:false};}var a=rnd(3,8),b=rnd(3,8),c=rnd(3,8),r=a+b+c;return{text:"Triangle : cotes "+a+" cm, "+b+" cm et "+c+" cm.\nQuel est son perimetre ?",hint:"Perimetre du triangle = somme des 3 cotes.",correct:r+" cm",choices:mkC(r+" cm",vars(r,3).map(function(x){return x+" cm";})),sp:false};}
-  if(t===2){var qs=[{q:"Il est 14h30. Dans 45 min, quelle heure sera-t-il ?",c:"15h15",p:["15h00","15h15","15h30","14h75"]},{q:"Il est 9h15. Il y a 30 min, quelle heure etait-il ?",c:"8h45",p:["8h45","8h30","9h00","9h45"]},{q:"Combien de minutes dans 2h30 ?",c:"150",p:["120","130","150","180"]},{q:"Combien de secondes dans 3 minutes ?",c:"180",p:["30","60","180","300"]},{q:"Activite de 10h20 a 11h45. Quelle est sa duree ?",c:"1h25",p:["1h15","1h25","1h35","2h25"]}],q=pick(qs);return{text:q.q,hint:"Compte d'abord les heures entieres, puis les minutes restantes.",correct:q.c,choices:shuf(q.p),sp:false};}
+  if(t===0){var qs=[{q:"1 mètre = ? centimètres",c:"100",p:["10","100","1000","50"]},{q:"1 kilomètre = ? mètres",c:"1000",p:["100","1000","10000","500"]},{q:"1 centimètre = ? millimètres",c:"10",p:["5","10","100","1000"]},{q:"250 centimètres = ? mètres",c:"2,5",p:["2,5","25","0,25","250"]},{q:"3 km = ? m",c:"3000",p:["300","3000","30000","30"]}],q=pick(qs);return{text:q.q,hint:"km × 1000 = m · m × 100 = cm · cm × 10 = mm.",correct:q.c,choices:shuf(q.p),sp:false};}
+  if(t===1){var sub=rnd(0,2);if(sub===0){var s=rnd(2,12),r=4*s;return{text:"Périmètre d'un carré de "+s+" cm de côté ?",hint:"Périmètre du carré = 4 × côté.",correct:r+" cm",choices:mkC(r+" cm",vars(r,4).map(function(x){return x+" cm";})),sp:false};}if(sub===1){var l=rnd(5,15),w=rnd(2,l-1),r=2*(l+w);return{text:"Rectangle "+l+" cm × "+w+" cm.\nQuel est son périmètre ?",hint:"Périmètre du rectangle = 2 × (longueur + largeur).",correct:r+" cm",choices:mkC(r+" cm",vars(r,4).map(function(x){return x+" cm";})),sp:false};}var a=rnd(3,8),b=rnd(3,8),c=rnd(3,8),r=a+b+c;return{text:"Triangle : côtés "+a+" cm, "+b+" cm et "+c+" cm.\nQuel est son périmètre ?",hint:"Périmètre du triangle = somme des 3 côtés.",correct:r+" cm",choices:mkC(r+" cm",vars(r,3).map(function(x){return x+" cm";})),sp:false};}
+  if(t===2){var qs=[{q:"Il est 14h30. Dans 45 min, quelle heure sera-t-il ?",c:"15h15",p:["15h00","15h15","15h30","14h75"]},{q:"Il est 9h15. Il y a 30 min, quelle heure était-il ?",c:"8h45",p:["8h45","8h30","9h00","9h45"]},{q:"Combien de minutes dans 2h30 ?",c:"150",p:["120","130","150","180"]},{q:"Combien de secondes dans 3 minutes ?",c:"180",p:["30","60","180","300"]},{q:"Activité de 10h20 à 11h45. Quelle est sa durée ?",c:"1h25",p:["1h15","1h25","1h35","2h25"]}],q=pick(qs);return{text:q.q,hint:"Compte d'abord les heures entières, puis les minutes restantes.",correct:q.c,choices:shuf(q.p),sp:false};}
   var qs=[{q:"1 kilogramme = ? grammes",c:"1000",p:["100","1000","10000","500"]},{q:"1 litre = ? millilitres",c:"1000",p:["10","100","1000","1500"]},{q:"2,5 kg = ? grammes",c:"2500",p:["250","2500","25000","2050"]},{q:"500 mL = ? L",c:"0,5",p:["0,5","5","50","0,05"]},{q:"3000 g = ? kg",c:"3",p:["0,3","3","30","300"]}],q=pick(qs);
-  return{text:q.q,hint:"1 kg = 1000 g. 1 L = 1000 mL.",correct:q.c,choices:shuf(q.p),sp:false};
+  return{text:q.q,hint:"1 kg = 1000 g · 1 L = 1000 mL.",correct:q.c,choices:shuf(q.p),sp:false};
 }
 
 function genSP(){
   var pool=[
-    function(){var a=rnd(12,48),b=rnd(12,48),r=a+b;return{text:"Lea a "+a+" billes dans un sac et "+b+" billes dans un autre.\nCombien a-t-elle de billes en tout ?",hint:"Additionne les deux groupes.",correct:r+" billes",choices:mkC(r+" billes",vars(r,5).map(function(x){return x+" billes";})),sp:true};},
-    function(){var tot=rnd(50,200),us=rnd(10,tot-10),r=tot-us;return{text:"L'ecole a achete "+tot+" crayons. Les eleves en ont utilise "+us+".\nCombien de crayons reste-t-il ?",hint:"Soustraction : total - utilises.",correct:r+" crayons",choices:mkC(r+" crayons",vars(r,5).map(function(x){return x+" crayons";})),sp:true};},
-    function(){var a=rnd(3,9),b=rnd(4,12),r=a*b;return{text:"Un fermier plante "+a+" rangees de "+b+" arbres chacune.\nCombien d'arbres au total ?",hint:"Rangees x arbres par rangee.",correct:r+" arbres",choices:mkC(r+" arbres",vars(r,Math.max(3,Math.floor(r/5))).map(function(x){return x+" arbres";})),sp:true};},
-    function(){var p=rnd(3,12),n=rnd(4,8),r=p*n;return{text:"Chaque livre coute "+p+" $. Mathis en achete "+n+".\nCombien depense-t-il ?",hint:"Cout total = prix x quantite.",correct:r+" $",choices:mkC(r+" $",vars(r,p).map(function(x){return x+" $";})),sp:true};},
-    function(){var s=rnd(4,8),bon=rnd(6,12),r=s*bon;return{text:"Amina prepare "+s+" sacs avec "+bon+" bonbons chacun.\nCombien de bonbons au total ?",hint:"Nombre de sacs x bonbons par sac.",correct:r+" bonbons",choices:mkC(r+" bonbons",vars(r,bon).map(function(x){return x+" bonbons";})),sp:true};},
-    function(){var b=rnd(3,6),r=rnd(4,10),a=b*r;return{text:a+" eleves forment des groupes egaux de "+b+".\nCombien y a-t-il de groupes ?",hint:"Division : total / taille d'un groupe.",correct:r+" groupes",choices:mkC(r+" groupes",vars(r,2).map(function(x){return x+" groupes";})),sp:true};},
-    function(){var d=pick([4,6,8]),n=rnd(1,d-1);return{text:"Zoe mange "+n+" tranches d'une pizza coupee en "+d+" tranches egales.\nQuelle fraction a-t-elle mangee ?",hint:"Numerateur = tranches mangees. Denominateur = tranches totales.",correct:n+"/"+d,choices:mkC(n+"/"+d,["1/2","1/3","1/4","2/3","3/4","2/4","3/6"].filter(function(f){return f!==n+"/"+d;})),sp:true};},
-    function(){var c=rnd(4,15),r=4*c;return{text:"Le parc de l'ecole est carre avec des cotes de "+c+" m.\nQuelle distance pour en faire le tour ?",hint:"Perimetre du carre = 4 x cote.",correct:r+" m",choices:mkC(r+" m",vars(r,4).map(function(x){return x+" m";})),sp:true};},
-    function(){var l=rnd(5,20),w=rnd(3,l-1),r=2*(l+w);return{text:"Le jardin de Samuel : "+l+" m de long et "+w+" m de large.\nLongueur de cloture pour l'entourer ?",hint:"Perimetre du rectangle = 2 x (longueur + largeur).",correct:r+" m",choices:mkC(r+" m",vars(r,4).map(function(x){return x+" m";})),sp:true};},
-    function(){var p=rnd(2,8),n1=rnd(3,6),n2=rnd(2,4),r=(n1+n2)*p;return{text:"Matin : "+n1+" livres vendus. Apres-midi : "+n2+" de plus.\nChaque livre coute "+p+" $. Total ramasse ?",hint:"Etape 1 : total de livres. Etape 2 : total x prix.",correct:r+" $",choices:mkC(r+" $",vars(r,Math.max(3,p)).map(function(x){return x+" $";})),sp:true};},
-    function(){var av=rnd(10,99)/10,bv=rnd(10,99)/10,r=Math.round((av+bv)*10)/10;return{text:"Theo achete un cahier a "+av.toFixed(1).replace(".",",")+" $ et un stylo a "+bv.toFixed(1).replace(".",",")+" $.\nTotal depense ?",hint:"Additionne les deux montants. Aligne les virgules.",correct:r.toFixed(1).replace(".",",")+" $",choices:mkC(r.toFixed(1).replace(".",",")+" $",[r+0.1,r-0.1,r+1,Math.max(0,r-1)].map(function(x){return x.toFixed(1).replace(".",",")+" $";})),sp:true};},
-    function(){var n=rnd(2,5),p=rnd(3,10),tot=n*p;return{text:n+" amis partagent une facture de "+tot+" $ en parts egales.\nCombien chaque personne paie-t-elle ?",hint:"Chaque part = total / nombre de personnes.",correct:p+" $",choices:mkC(p+" $",vars(p,2).map(function(x){return x+" $";})),sp:true};}
+    function(){var a=rnd(12,48),b=rnd(12,48),r=a+b;return{text:"Léa a "+a+" billes dans un sac et "+b+" billes dans un autre.\nCombien a-t-elle de billes en tout ?",hint:"Additionne les deux groupes de billes.",correct:r+" billes",choices:mkC(r+" billes",vars(r,5).map(function(x){return x+" billes";})),sp:true};},
+    function(){var tot=rnd(50,200),us=rnd(10,tot-10),r=tot-us;return{text:"L'école a acheté "+tot+" crayons. Les élèves en ont utilisé "+us+".\nCombien de crayons reste-t-il ?",hint:"Soustraction : total − utilisés.",correct:r+" crayons",choices:mkC(r+" crayons",vars(r,5).map(function(x){return x+" crayons";})),sp:true};},
+    function(){var a=rnd(3,9),b=rnd(4,12),r=a*b;return{text:"Un fermier plante "+a+" rangées de "+b+" arbres chacune.\nCombien d'arbres au total ?",hint:"Rangées × arbres par rangée.",correct:r+" arbres",choices:mkC(r+" arbres",vars(r,Math.max(3,Math.floor(r/5))).map(function(x){return x+" arbres";})),sp:true};},
+    function(){var p=rnd(3,12),n=rnd(4,8),r=p*n;return{text:"Chaque livre coûte "+p+" $. Mathis en achète "+n+".\nCombien dépense-t-il au total ?",hint:"Coût total = prix unitaire × quantité.",correct:r+" $",choices:mkC(r+" $",vars(r,p).map(function(x){return x+" $";})),sp:true};},
+    function(){var s=rnd(4,8),bon=rnd(6,12),r=s*bon;return{text:"Amina prépare "+s+" sacs avec "+bon+" bonbons chacun.\nCombien de bonbons utilise-t-elle ?",hint:"Nombre de sacs × bonbons par sac.",correct:r+" bonbons",choices:mkC(r+" bonbons",vars(r,bon).map(function(x){return x+" bonbons";})),sp:true};},
+    function(){var b=rnd(3,6),r=rnd(4,10),a=b*r;return{text:a+" élèves forment des groupes égaux de "+b+".\nCombien y a-t-il de groupes ?",hint:"Division : total ÷ taille d'un groupe.",correct:r+" groupes",choices:mkC(r+" groupes",vars(r,2).map(function(x){return x+" groupes";})),sp:true};},
+    function(){var d=pick([4,6,8]),n=rnd(1,d-1);return{text:"Zoé mange "+n+" tranches d'une pizza coupée en "+d+" tranches égales.\nQuelle fraction a-t-elle mangée ?",hint:"Numérateur = tranches mangées. Dénominateur = tranches totales.",correct:n+"/"+d,choices:mkC(n+"/"+d,["1/2","1/3","1/4","2/3","3/4","2/4","3/6"].filter(function(f){return f!==n+"/"+d;})),sp:true};},
+    function(){var c=rnd(4,15),r=4*c;return{text:"Le parc de l'école est carré avec des côtés de "+c+" m.\nQuelle distance pour en faire le tour ?",hint:"Périmètre du carré = 4 × côté.",correct:r+" m",choices:mkC(r+" m",vars(r,4).map(function(x){return x+" m";})),sp:true};},
+    function(){var l=rnd(5,20),w=rnd(3,l-1),r=2*(l+w);return{text:"Le jardin de Samuel : "+l+" m de long et "+w+" m de large.\nLongueur de clôture pour l'entourer ?",hint:"Périmètre du rectangle = 2 × (longueur + largeur).",correct:r+" m",choices:mkC(r+" m",vars(r,4).map(function(x){return x+" m";})),sp:true};},
+    function(){var p=rnd(2,8),n1=rnd(3,6),n2=rnd(2,4),r=(n1+n2)*p;return{text:"Matin : "+n1+" livres vendus. Après-midi : "+n2+" de plus.\nChaque livre coûte "+p+" $. Total ramassé ?",hint:"Étape 1 : total de livres. Étape 2 : total × prix.",correct:r+" $",choices:mkC(r+" $",vars(r,Math.max(3,p)).map(function(x){return x+" $";})),sp:true};},
+    function(){var av=rnd(10,99)/10,bv=rnd(10,99)/10,r=Math.round((av+bv)*10)/10;return{text:"Théo achète un cahier à "+av.toFixed(1).replace(".",",")+" $ et un stylo à "+bv.toFixed(1).replace(".",",")+" $.\nTotal dépensé ?",hint:"Additionne les deux montants. Aligne bien les virgules.",correct:r.toFixed(1).replace(".",",")+" $",choices:mkC(r.toFixed(1).replace(".",",")+" $",[r+0.1,r-0.1,r+1,Math.max(0,r-1)].map(function(x){return x.toFixed(1).replace(".",",")+" $";})),sp:true};},
+    function(){var n=rnd(2,5),p=rnd(3,10),tot=n*p;return{text:n+" amis partagent une facture de "+tot+" $ en parts égales.\nCombien chaque personne paie-t-elle ?",hint:"Chaque part = total ÷ nombre de personnes.",correct:p+" $",choices:mkC(p+" $",vars(p,2).map(function(x){return x+" $";})),sp:true};}
   ];
   return pick(pool)();
 }
 
 var TOPICS=[
-  {id:0,icon:"🔢",name:"Nombres naturels",desc:"Jusqu a 10 000",pc:"p0",gen:genNombres},
-  {id:1,icon:"➕",name:"Addition & Soustraction",desc:"Grands nombres et decimaux",pc:"p1",gen:genAddSub},
+  {id:0,icon:"🔢",name:"Nombres naturels",desc:"Jusqu'à 10 000",pc:"p0",gen:genNombres},
+  {id:1,icon:"➕",name:"Addition & Soustraction",desc:"Grands nombres et décimaux",pc:"p1",gen:genAddSub},
   {id:2,icon:"✖️",name:"Multiplication & Division",desc:"Tables et algorithmes",pc:"p2",gen:genMulDiv},
-  {id:3,icon:"🍕",name:"Fractions",desc:"Sens, equivalence, comparaison",pc:"p3",gen:genFractions},
-  {id:4,icon:"📐",name:"Geometrie",desc:"Polygones, angles, symetrie",pc:"p4",gen:genGeo},
-  {id:5,icon:"📏",name:"Mesure",desc:"Longueur, temps, perimetre",pc:"p5",gen:genMesure},
-  {id:6,icon:"📖",name:"Situations-problemes",desc:"Contextes reels - style MEQ",pc:"p6",gen:genSP}
+  {id:3,icon:"🍕",name:"Fractions",desc:"Sens, équivalence, comparaison",pc:"p3",gen:genFractions},
+  {id:4,icon:"📐",name:"Géométrie",desc:"Polygones, angles, symétrie",pc:"p4",gen:genGeo},
+  {id:5,icon:"📏",name:"Mesure",desc:"Longueur, temps, périmètre",pc:"p5",gen:genMesure},
+  {id:6,icon:"📖",name:"Situations-problèmes",desc:"Contextes réels — style MEQ",pc:"p6",gen:genSP}
 ];
 
-// ── ENGINE ──
-var noTimer=false,curTopic=null,isExam=false;
-var qs=[],qi=0,score=0,lives=0,wrong=0;
-var tInt=null,tLeft=0,done=false,hist=[];
-var TSEC=15,TOTAL=10,MLIVES=3;
+var noTimer=false,curTopic=null,isExam=false,qs=[],qi=0,score=0,lives=0,wrong=0;
+var tInt=null,tLeft=0,done=false,hist=[],TSEC=15,TOTAL=10,MLIVES=3;
 
 document.getElementById("ckChrono").addEventListener("change",function(){noTimer=this.checked;});
 
 function buildMenu(){
   var g=document.getElementById("menuGrid");g.innerHTML="";
   TOPICS.forEach(function(t){
-    var btn=document.createElement("button");
-    btn.className="topic-btn";
+    var btn=document.createElement("button");btn.className="topic-btn";
     btn.innerHTML='<span class="topic-emoji">'+t.icon+'</span><div class="topic-name">'+t.name+'</div><div class="topic-desc">'+t.desc+'</div>';
-    btn.onclick=(function(tt){return function(){startTopic(tt);};})(t);
-    g.appendChild(btn);
+    btn.onclick=(function(tt){return function(){startTopic(tt);};})(t);g.appendChild(btn);
   });
 }
 
-function startTopic(t){
-  curTopic=t;isExam=false;
-  qs=[];for(var i=0;i<TOTAL;i++)qs.push(t.gen());
-  launch(t.name,t.pc,TOTAL);
-}
+function startTopic(t){curTopic=t;isExam=false;qs=[];for(var i=0;i<TOTAL;i++)qs.push(t.gen());launch(t.name,t.pc);}
 
 function startExam(){
-  curTopic=null;isExam=true;
-  var pool=[];
+  curTopic=null;isExam=true;var pool=[];
   TOPICS.slice(0,6).forEach(function(t){pool.push(t.gen());pool.push(t.gen());});
   pool.push(genSP());pool.push(genSP());pool.push(genSP());
-  qs=shuf(pool).slice(0,15);
-  launch("Simulation MEQ","p4",15);
+  qs=shuf(pool).slice(0,15);launch("Simulation MEQ","p4");
 }
 
-function launch(name,pc,total){
+function launch(name,pc){
   qi=0;score=0;lives=MLIVES;wrong=0;hist=[];
   document.getElementById("headerTitle").textContent=name;
   document.getElementById("scVal").textContent=0;
   var p=document.getElementById("pillEl");p.textContent=name;p.className="topic-pill "+pc;
-  renderHearts();
-  showScreen("sgame");
-  nextQ();
+  renderHearts();showScreen("sgame");nextQ();
 }
 
 function nextQ(){
   if(qi>=qs.length||lives<=0){endGame();return;}
-  done=false;
-  var q=qs[qi];
+  done=false;var q=qs[qi];
   document.getElementById("qmeta").textContent="Question "+(qi+1)+" / "+qs.length;
   var sp=document.getElementById("sptagEl");q.sp?sp.classList.remove("hide"):sp.classList.add("hide");
   document.getElementById("qtxt").textContent=q.text;
@@ -565,97 +339,56 @@ function nextQ(){
   document.getElementById("qfb").textContent="";document.getElementById("qfb").className="q-feedback";
   document.getElementById("scVal").textContent=score;
   var hb=document.getElementById("hbtn");hb.disabled=false;hb.style.opacity="1";
-  var pb=document.getElementById("progBar");pb.style.width=(qi/qs.length*100)+"%";
-  document.getElementById("ptxt").textContent=(qi+1)+" / "+qs.length+" | Vies : "+lives;
+  document.getElementById("progBar").style.width=(qi/qs.length*100)+"%";
+  document.getElementById("ptxt").textContent=(qi+1)+" / "+qs.length+" · Vies : "+lives;
   var cEl=document.getElementById("choicesEl");cEl.innerHTML="";
   var long=q.choices.some(function(c){return c.length>12;});
   cEl.className="choices "+(long?"ch1":"ch2");
   q.choices.forEach(function(c){
     var btn=document.createElement("button");btn.className="choice";btn.textContent=c;
-    btn.onclick=(function(bt,cv){return function(){answer(bt,cv,q);};})(btn,c);
-    cEl.appendChild(btn);
+    btn.onclick=(function(bt,cv){return function(){answer(bt,cv,q);};})(btn,c);cEl.appendChild(btn);
   });
   var tc=document.getElementById("timerEl");clearInterval(tInt);
   if(noTimer){tc.innerHTML='<div class="timer-off"></div>';}
-  else{
-    tc.innerHTML='<div class="timer-wrap"><div class="timer-bar" id="tbarEl"></div></div>';
-    tLeft=TSEC;updateBar();
-    tInt=setInterval(function(){tLeft-=0.1;updateBar();if(tLeft<=0){clearInterval(tInt);timeOut(q);}},100);
-  }
+  else{tc.innerHTML='<div class="timer-wrap"><div class="timer-bar" id="tbarEl"></div></div>';tLeft=TSEC;updateBar();tInt=setInterval(function(){tLeft-=0.1;updateBar();if(tLeft<=0){clearInterval(tInt);timeOut(q);}},100);}
 }
 
 function updateBar(){var b=document.getElementById("tbarEl");if(!b)return;var p=Math.max(0,(tLeft/TSEC)*100);b.style.width=p+"%";b.style.background=p>60?"#4F46E5":p>30?"#F59E0B":"#EF4444";}
 
-function timeOut(q){
-  if(done)return;done=true;lives--;wrong++;renderHearts();
-  hist.push({q:q.text.split("\n")[0].substring(0,60),c:q.correct,ok:false});
-  setFB(false,"Temps ecoule ! Reponse : "+q.correct);hlC(q.correct);
-  document.getElementById("ptxt").textContent=(qi+1)+" / "+qs.length+" | Vies : "+lives;
-  setTimeout(function(){qi++;nextQ();},2000);
-}
+function timeOut(q){if(done)return;done=true;lives--;wrong++;renderHearts();hist.push({q:q.text.split("\n")[0].substring(0,60),c:q.correct,ok:false});setFB(false,"Temps écoulé ! Réponse : "+q.correct);hlC(q.correct);document.getElementById("ptxt").textContent=(qi+1)+" / "+qs.length+" · Vies : "+lives;setTimeout(function(){qi++;nextQ();},2000);}
 
 function showHint(){var h=document.getElementById("qhint");h.classList.remove("hide");var hb=document.getElementById("hbtn");hb.disabled=true;hb.style.opacity="0.4";}
 
-function answer(btn,val,q){
-  if(done)return;done=true;clearInterval(tInt);
-  var ok=val===q.correct;
-  if(ok)score++;else{lives--;wrong++;}
-  hist.push({q:q.text.split("\n")[0].substring(0,60),c:q.correct,ok:ok});
-  renderHearts();document.getElementById("scVal").textContent=score;
-  btn.classList.add(ok?"cok":"cerr");if(!ok)hlC(q.correct);
-  setFB(ok,ok?"Bravo ! Bonne reponse !":"Erreur ! La bonne reponse etait : "+q.correct);
-  document.querySelectorAll(".choice").forEach(function(b){b.disabled=true;});
-  setTimeout(function(){qi++;nextQ();},2000);
-}
+function answer(btn,val,q){if(done)return;done=true;clearInterval(tInt);var ok=val===q.correct;if(ok)score++;else{lives--;wrong++;}hist.push({q:q.text.split("\n")[0].substring(0,60),c:q.correct,ok:ok});renderHearts();document.getElementById("scVal").textContent=score;btn.classList.add(ok?"cok":"cerr");if(!ok)hlC(q.correct);setFB(ok,ok?"✓ Bravo ! Bonne réponse !":"✗ Erreur ! La bonne réponse était : "+q.correct);document.querySelectorAll(".choice").forEach(function(b){b.disabled=true;});setTimeout(function(){qi++;nextQ();},2000);}
 
 function hlC(c){document.querySelectorAll(".choice").forEach(function(b){if(b.textContent===c)b.classList.add("cok");});}
 function setFB(ok,msg){var el=document.getElementById("qfb");el.textContent=msg;el.className="q-feedback "+(ok?"ok":"err");}
 
-function renderHearts(){
-  var el=document.getElementById("heartsEl");el.innerHTML="";
-  for(var i=0;i<MLIVES;i++){var h=document.createElement("div");h.className="heart "+(i<lives?"":"lost");h.textContent="❤️";el.appendChild(h);}
-}
+function renderHearts(){var el=document.getElementById("heartsEl");el.innerHTML="";for(var i=0;i<MLIVES;i++){var h=document.createElement("div");h.className="heart "+(i<lives?"":"lost");h.textContent="❤️";el.appendChild(h);}}
 
 function endGame(){
-  clearInterval(tInt);
-  var total=qs.length,pct=Math.round((score/total)*100);
+  clearInterval(tInt);var total=qs.length,pct=Math.round((score/total)*100);
   var icon,title,msg;
-  if(pct>=90){icon="🏆";title="Excellent !";msg="Tu maitrises parfaitement - pret pour juin !";}
-  else if(pct>=70){icon="⭐";title="Tres bien !";msg="Tu es bien prepare pour les evaluations du MEQ !";}
-  else if(pct>=50){icon="👍";title="Bien joue !";msg="Encore un peu de pratique et tu seras pret !";}
-  else{icon="💪";title="Courage !";msg="Revois cette notion avec ton enseignant et reessaie !";}
-  document.getElementById("rico").textContent=icon;
-  document.getElementById("rtit").textContent=title;
-  document.getElementById("rsco").textContent=score+" / "+total;
-  document.getElementById("rmsg").textContent=msg;
-  document.getElementById("stok").textContent=score;
-  document.getElementById("sterr").textContent=wrong;
-  document.getElementById("stpct").textContent=pct+"%";
+  if(pct>=90){icon="🏆";title="Excellent !";msg="Tu maîtrises parfaitement — prêt·e pour juin !";}
+  else if(pct>=70){icon="⭐";title="Très bien !";msg="Tu es bien préparé·e pour les évaluations du MEQ !";}
+  else if(pct>=50){icon="👍";title="Bien joué !";msg="Encore un peu de pratique et tu seras prêt·e !";}
+  else{icon="💪";title="Courage !";msg="Revois cette notion avec ton enseignant·e et réessaie !";}
+  document.getElementById("rico").textContent=icon;document.getElementById("rtit").textContent=title;
+  document.getElementById("rsco").textContent=score+" / "+total;document.getElementById("rmsg").textContent=msg;
+  document.getElementById("stok").textContent=score;document.getElementById("sterr").textContent=wrong;document.getElementById("stpct").textContent=pct+"%";
   var rl=document.getElementById("revEl");rl.innerHTML="";
-  hist.forEach(function(h){
-    var d=document.createElement("div");d.className="rev-item";
-    d.innerHTML='<div class="rev-dot '+(h.ok?"rdok":"rderr")+'"></div><div class="rev-q">'+h.q+'</div><div class="rev-a">'+h.c+'</div>';
-    rl.appendChild(d);
-  });
+  hist.forEach(function(h){var d=document.createElement("div");d.className="rev-item";d.innerHTML='<div class="rev-dot '+(h.ok?"rdok":"rderr")+'"></div><div class="rev-q">'+h.q+'</div><div class="rev-a">'+h.c+'</div>';rl.appendChild(d);});
   showScreen("sresult");
 }
 
 function replay(){if(isExam)startExam();else if(curTopic)startTopic(curTopic);}
 function goMenu(){clearInterval(tInt);showScreen("smenu");}
-function showScreen(id){
-  ["smenu","sgame","sresult"].forEach(function(s){document.getElementById(s).classList.toggle("hide",s!==id);});
-}
+function showScreen(id){["smenu","sgame","sresult"].forEach(function(s){document.getElementById(s).classList.toggle("hide",s!==id);});}
 
-// ── BOOT ──
 window.addEventListener("load",function(){
   buildMenu();
-  setTimeout(function(){
-    document.getElementById("splash").classList.add("hide");
-    document.getElementById("app").classList.remove("hide");
-  },1200);
-  if("serviceWorker" in navigator){
-    navigator.serviceWorker.register("sw.js").catch(function(){});
-  }
+  setTimeout(function(){document.getElementById("splash").classList.add("hide");document.getElementById("app").classList.remove("hide");},1000);
+  if("serviceWorker" in navigator){navigator.serviceWorker.register("sw.js").catch(function(){});}
 });
 </script>
 </body>
