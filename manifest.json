@@ -1,0 +1,16 @@
+{
+  "name": "Maths Aventure QC - 4e annee",
+  "short_name": "Maths QC",
+  "description": "Jeu educatif de mathematiques aligne sur le programme MEQ 4e annee du primaire",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1a1a2e",
+  "theme_color": "#4F46E5",
+  "lang": "fr",
+  "categories": ["education", "games"],
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}
