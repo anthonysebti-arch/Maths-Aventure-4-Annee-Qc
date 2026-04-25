@@ -113,6 +113,8 @@ body{font-family:-apple-system,'Segoe UI',sans-serif;color:var(--text)}
 .btn-primary{width:100%;padding:16px;border:none;border-radius:var(--radius);font-size:16px;font-weight:700;cursor:pointer;margin-bottom:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;transition:transform .12s}
 .btn-primary:active{transform:scale(.98)}
 .btn-secondary{width:100%;padding:14px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;font-weight:600;color:var(--muted);background:transparent;cursor:pointer}
+.mute-btn{width:34px;height:34px;border-radius:50%;background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:17px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s}
+.mute-btn.muted{background:#334155;color:var(--muted)}
 </style>
 </head>
 <body>
@@ -155,6 +157,7 @@ body{font-family:-apple-system,'Segoe UI',sans-serif;color:var(--text)}
       <button class="back-btn" onclick="goMenu()">&#8592;</button>
       <div class="header-title" id="headerTitle"></div>
       <div class="header-score">Score : <span id="scVal">0</span></div>
+      <button class="mute-btn" id="muteBtn" onclick="toggleMute()">&#128266;</button>
     </div>
     <div class="screen game-screen">
       <div class="hud">
@@ -298,8 +301,67 @@ var TOPICS=[
   {id:6,icon:"📖",name:"Situations-problèmes",desc:"Contextes réels — style MEQ",pc:"p6",gen:genSP}
 ];
 
-var noTimer=false,curTopic=null,isExam=false,qs=[],qi=0,score=0,lives=0,wrong=0;
+var noTimer=false,muted=false,curTopic=null,isExam=false,qs=[],qi=0,score=0,lives=0,wrong=0;
 var tInt=null,tLeft=0,done=false,hist=[],TSEC=15,TOTAL=10,MLIVES=3;
+
+function getAudioCtx(){
+  try{return new(window.AudioContext||window.webkitAudioContext)();}catch(e){return null;}
+}
+
+function playSuccess(){
+  if(muted)return;
+  var ctx=getAudioCtx();if(!ctx)return;
+  var notes=[523.25,659.25,783.99,1046.50];
+  notes.forEach(function(freq,i){
+    var osc=ctx.createOscillator();
+    var gain=ctx.createGain();
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.type="sine";
+    osc.frequency.value=freq;
+    var t=ctx.currentTime+i*0.1;
+    gain.gain.setValueAtTime(0,t);
+    gain.gain.linearRampToValueAtTime(0.28,t+0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001,t+0.32);
+    osc.start(t);osc.stop(t+0.35);
+  });
+}
+
+function playFailure(){
+  if(muted)return;
+  var ctx=getAudioCtx();if(!ctx)return;
+  var osc=ctx.createOscillator();
+  var gain=ctx.createGain();
+  osc.connect(gain);gain.connect(ctx.destination);
+  osc.type="sawtooth";
+  osc.frequency.setValueAtTime(280,ctx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(90,ctx.currentTime+0.45);
+  gain.gain.setValueAtTime(0.25,ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.45);
+  osc.start(ctx.currentTime);osc.stop(ctx.currentTime+0.5);
+}
+
+function playTimeout(){
+  if(muted)return;
+  var ctx=getAudioCtx();if(!ctx)return;
+  [0,0.18].forEach(function(delay){
+    var osc=ctx.createOscillator();
+    var gain=ctx.createGain();
+    osc.connect(gain);gain.connect(ctx.destination);
+    osc.type="triangle";
+    osc.frequency.value=220;
+    var t=ctx.currentTime+delay;
+    gain.gain.setValueAtTime(0.22,t);
+    gain.gain.exponentialRampToValueAtTime(0.001,t+0.15);
+    osc.start(t);osc.stop(t+0.18);
+  });
+}
+
+function toggleMute(){
+  muted=!muted;
+  var btn=document.getElementById("muteBtn");
+  btn.innerHTML=muted?"&#128264;":"&#128266;";
+  btn.classList.toggle("muted",muted);
+}
 
 document.getElementById("ckChrono").addEventListener("change",function(){noTimer=this.checked;});
 
@@ -355,11 +417,11 @@ function nextQ(){
 
 function updateBar(){var b=document.getElementById("tbarEl");if(!b)return;var p=Math.max(0,(tLeft/TSEC)*100);b.style.width=p+"%";b.style.background=p>60?"#4F46E5":p>30?"#F59E0B":"#EF4444";}
 
-function timeOut(q){if(done)return;done=true;lives--;wrong++;renderHearts();hist.push({q:q.text.split("\n")[0].substring(0,60),c:q.correct,ok:false});setFB(false,"Temps écoulé ! Réponse : "+q.correct);hlC(q.correct);document.getElementById("ptxt").textContent=(qi+1)+" / "+qs.length+" · Vies : "+lives;setTimeout(function(){qi++;nextQ();},2000);}
+function timeOut(q){if(done)return;done=true;lives--;wrong++;renderHearts();playTimeout();hist.push({q:q.text.split("\n")[0].substring(0,60),c:q.correct,ok:false});setFB(false,"Temps écoulé ! Réponse : "+q.correct);hlC(q.correct);document.getElementById("ptxt").textContent=(qi+1)+" / "+qs.length+" · Vies : "+lives;setTimeout(function(){qi++;nextQ();},2000);}
 
 function showHint(){var h=document.getElementById("qhint");h.classList.remove("hide");var hb=document.getElementById("hbtn");hb.disabled=true;hb.style.opacity="0.4";}
 
-function answer(btn,val,q){if(done)return;done=true;clearInterval(tInt);var ok=val===q.correct;if(ok)score++;else{lives--;wrong++;}hist.push({q:q.text.split("\n")[0].substring(0,60),c:q.correct,ok:ok});renderHearts();document.getElementById("scVal").textContent=score;btn.classList.add(ok?"cok":"cerr");if(!ok)hlC(q.correct);setFB(ok,ok?"✓ Bravo ! Bonne réponse !":"✗ Erreur ! La bonne réponse était : "+q.correct);document.querySelectorAll(".choice").forEach(function(b){b.disabled=true;});setTimeout(function(){qi++;nextQ();},2000);}
+function answer(btn,val,q){if(done)return;done=true;clearInterval(tInt);var ok=val===q.correct;if(ok){score++;playSuccess();}else{lives--;wrong++;playFailure();}hist.push({q:q.text.split("\n")[0].substring(0,60),c:q.correct,ok:ok});renderHearts();document.getElementById("scVal").textContent=score;btn.classList.add(ok?"cok":"cerr");if(!ok)hlC(q.correct);setFB(ok,ok?"✓ Bravo ! Bonne réponse !":"✗ Erreur ! La bonne réponse était : "+q.correct);document.querySelectorAll(".choice").forEach(function(b){b.disabled=true;});setTimeout(function(){qi++;nextQ();},2000);}
 
 function hlC(c){document.querySelectorAll(".choice").forEach(function(b){if(b.textContent===c)b.classList.add("cok");});}
 function setFB(ok,msg){var el=document.getElementById("qfb");el.textContent=msg;el.className="q-feedback "+(ok?"ok":"err");}
